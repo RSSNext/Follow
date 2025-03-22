@@ -19,9 +19,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-runner:
+    runs-on: ubuntu-latest
+    outputs:
+      runner-label: ${{ steps.set-runner.outputs.runner-label }}
+
+    steps:
+      - name: Set runner
+        id: set-runner
+        run: |
+          runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.REPO_RUNNER_ACCESS_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
+          available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .busy == false and .labels[] .name == "self-hosted")')
+          if [ -n "$available" ]; then
+            echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
+          else
+            echo "runner-label=macos-latest" >> $GITHUB_OUTPUT
+          fi
+
   build:
     name: Build iOS IPA for device
-    runs-on: self-hosted
+    needs: check-runner
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
 
     steps:
       - name: 📦 Checkout code
@@ -62,7 +80,8 @@ jobs:
 
   build-simulator:
     name: Build iOS IPA for simulator
-    runs-on: self-hosted
+    needs: check-runner
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
 
     steps:
       - name: 📦 Checkout code
