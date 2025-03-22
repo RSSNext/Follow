@@ -5,22 +5,25 @@
 
   <h3>Folo</h3>
   <p>
-    <a href="https://discord.gg/followapp">Discord</a>
-    ·
-    <a href="https://x.com/intent/follow?screen_name=follow_app_">Twitter</a>
-    ·
-    <a href="https://github.com/RSSNext/Folo/releases/latest">Releases</a>
+    <a href="https://github.com/RSSNext/Folo/graphs/contributors"><img src="https://img.shields.io/github/stars/RSSNext/Follow?color=FF5E01&labelColor=black&style=flat-square&logo=github&label=Stars" /></a>
+    <a href="https://github.com/RSSNext/Folo/graphs/contributors"><img src="https://img.shields.io/github/contributors/RSSNext/Folo?style=flat-square&logo=github&label=Contributors&labelColor=black&color=FF5E01" /></a>
+    <a href="https://github.com/RSSNext/Folo/releases"><img src="https://img.shields.io/github/downloads/RSSNext/Folo/total?color=FF5E01&labelColor=black&logo=github&style=flat-square&label=Downloads" /></a>
+    <a href="https://x.com/intent/follow?screen_name=follow_app_"><img src="https://img.shields.io/badge/Follow-blue?color=FF5E01&logo=x&labelColor=black&style=flat-square" /></a>
+    <a href="https://discord.gg/followapp" target="_blank"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Ffollowapp%3Fwith_counts%3Dtrue&query=approximate_member_count&color=FF5E01&label=Discord&labelColor=black&logo=discord&logoColor=white&style=flat-square"/></a>
+    <br />
+    <a href="https://github.com/RSSNext/Folo/releases"><img src="https://img.shields.io/github/package-json/v/RSSNext/Folo?filename=%2Fapps%2Fmobile%2Fpackage.json&style=flat-square&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA1NSA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQxLjc5NDQgMTBIMTguNjc4NkMxNS44ODMzIDEwIDEzLjYxNzIgMTIuMTk2NSAxMy42MTcyIDE0LjkwNTlDMTMuNjE3MiAxNy42MTU0IDE1Ljg4MzMgMTkuODExOSAxOC42Nzg2IDE5LjgxMTlINDEuNzk0NEM0NC41ODk5IDE5LjgxMTkgNDYuODU1OSAxNy42MTU0IDQ2Ljg1NTkgMTQuOTA1OUM0Ni44NTU5IDEyLjE5NjUgNDQuNTg5OSAxMCA0MS43OTQ0IDEwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI5LjQ2ODMgMjIuNzU1OUgxNC4wNjE1QzExLjI2NjEgMjIuNzU1OSA5IDI0Ljk1MjMgOSAyNy42NjE4QzkgMzAuMzcxMyAxMS4yNjYxIDMyLjU2NzcgMTQuMDYxNSAzMi41Njc3SDI5LjQ2ODNDMzIuMjYzNyAzMi41Njc3IDM0LjUyOTggMzAuMzcxMyAzNC41Mjk4IDI3LjY2MThDMzQuNTI5OCAyNC45NTIzIDMyLjI2MzcgMjIuNzU1OSAyOS40NjgzIDIyLjc1NTlaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMzAuOTU4OSA0MC40MjcyQzMwLjk1ODkgMzcuNzE3OSAyOC42OTI4IDM1LjUyMTUgMjUuODk3NCAzNS41MjE1QzIzLjEwMjEgMzUuNTIxNSAyMC44MzU5IDM3LjcxNzkgMjAuODM1OSA0MC40MjcyQzIwLjgzNTkgNDMuMTM3MSAyMy4xMDIxIDQ1LjMzMzIgMjUuODk3NCA0NS4zMzMyQzI4LjY5MjggNDUuMzMzMiAzMC45NTg5IDQzLjEzNzEgMzAuOTU4OSA0MC40MjcyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc%2BCg%3D%3D&label=Mobile&labelColor=black&color=FF5E01" /></a>
+    <a href="https://github.com/RSSNext/Folo/releases"><img src="https://img.shields.io/github/package-json/v/RSSNext/Folo?filename=%2Fapps%2Fdesktop%2Fpackage.json&style=flat-square&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCA1NSA1NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQxLjc5NDQgMTBIMTguNjc4NkMxNS44ODMzIDEwIDEzLjYxNzIgMTIuMTk2NSAxMy42MTcyIDE0LjkwNTlDMTMuNjE3MiAxNy42MTU0IDE1Ljg4MzMgMTkuODExOSAxOC42Nzg2IDE5LjgxMTlINDEuNzk0NEM0NC41ODk5IDE5LjgxMTkgNDYuODU1OSAxNy42MTU0IDQ2Ljg1NTkgMTQuOTA1OUM0Ni44NTU5IDEyLjE5NjUgNDQuNTg5OSAxMCA0MS43OTQ0IDEwWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI5LjQ2ODMgMjIuNzU1OUgxNC4wNjE1QzExLjI2NjEgMjIuNzU1OSA5IDI0Ljk1MjMgOSAyNy42NjE4QzkgMzAuMzcxMyAxMS4yNjYxIDMyLjU2NzcgMTQuMDYxNSAzMi41Njc3SDI5LjQ2ODNDMzIuMjYzNyAzMi41Njc3IDM0LjUyOTggMzAuMzcxMyAzNC41Mjk4IDI3LjY2MThDMzQuNTI5OCAyNC45NTIzIDMyLjI2MzcgMjIuNzU1OSAyOS40NjgzIDIyLjc1NTlaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMzAuOTU4OSA0MC40MjcyQzMwLjk1ODkgMzcuNzE3OSAyOC42OTI4IDM1LjUyMTUgMjUuODk3NCAzNS41MjE1QzIzLjEwMjEgMzUuNTIxNSAyMC44MzU5IDM3LjcxNzkgMjAuODM1OSA0MC40MjcyQzIwLjgzNTkgNDMuMTM3MSAyMy4xMDIxIDQ1LjMzMzIgMjUuODk3NCA0NS4zMzMyQzI4LjY5MjggNDUuMzMzMiAzMC45NTg5IDQzLjEzNzEgMzAuOTU4OSA0MC40MjcyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc%2BCg%3D%3D&label=Desktop&labelColor=black&color=FF5E01" /></a>
+    <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604"><img src="https://img.shields.io/itunes/v/6739802604?style=flat-square&logo=apple&label=App%20Store&color=FF5C00&labelColor=black" /></a>
+    <a href="https://apps.microsoft.com/detail/9nvfzpv0v0ht?mode=direct"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffolo-microsoft-store-version.rss3.workers.dev%2F&query=version&style=flat-square&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMyAzaDguNTN2OC41M0gzek0xMi40NjkgM2g4LjUzdjguNTNoLTguNTN6TTMgMTIuNDdoOC41M1YyMUgzek0xMi40NjkgMTIuNDdoOC41M1YyMWgtOC41M3oiLz48L3N2Zz4%3D&logoColor=white&label=Microsoft%20Store&labelColor=black&color=FF5E01&cacheSeconds=3600&prefix=v" /></a>
     <br />
     <br />
-    <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604" target="_blank"><img src="https://github.com/user-attachments/assets/a94d8698-2a11-4f43-9b0a-b756b17b61f7" alt="App Store" height="55"/></a>
-    <a href="https://github.com/RSSNext/Folo" target="_blank"><img src="https://github.com/user-attachments/assets/59b957fb-59ed-4ef0-994e-f6a402a6fe2b" alt="GitHub Trending" height="55"/></a>
+    <!-- <a href="https://github.com/RSSNext/Folo" target="_blank"><img src="https://github.com/user-attachments/assets/59b957fb-59ed-4ef0-994e-f6a402a6fe2b" alt="GitHub Trending" height="55"/></a>
     <br />
-    <br />
-    <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604?platform=iphone" target="_blank"><img src="https://github.com/user-attachments/assets/83168d47-b9b1-4f28-abec-4e37075c7f1b" alt="App Store" width="52%"/></a>
+    <br /> -->
+    <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604" target="_blank"><img src="https://github.com/user-attachments/assets/83168d47-b9b1-4f28-abec-4e37075c7f1b" alt="App Store" width="52%"/></a>
     <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604" target="_blank"><img src="https://github.com/user-attachments/assets/7b4f27f1-c345-400f-a307-9c61c43263ac" alt="GitHub Trending" width="46%"/></a>
     <br />
     <br />
-
   </p>
 </div>
 
@@ -32,9 +35,13 @@ Whether for users or professional developers, Folo will be your open information
 
 Feel free to try it using the following methods:
 
-| [![](https://img.shields.io/badge/Try%20Web%20App-Online-55b467?labelColor=black&logo=vercel&style=flat-square)](https://app.follow.is)                                                                                                                                                                                                                                                | No installation necessary! Visit our web app to experience it firsthand.                 |
-| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
-| [![](https://img.shields.io/github/v/release/RSSNext/Folo?color=369eff&labelColor=black&logo=github&style=flat-square&label=Releases)](https://github.com/RSSNext/Folo/releases/latest) [![](https://img.shields.io/github/downloads/RSSNext/Folo/total?color=369eff&labelColor=black&logo=github&style=flat-square&label=Downloads)](https://github.com/RSSNext/Folo/releases/latest) | Download and install the desktop client for a smoother experience and enhanced features. |
+| Operating System | Source                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Any              | <a href="https://app.follow.is" target="_blank"><img src="https://github.com/user-attachments/assets/8fefcf14-aa6d-4b6b-b855-00344f1e3726" alt="Browser" height="55"/></a>                                                                                                                                                                                                                                                     |
+| iOS              | <a href="https://apps.apple.com/us/app/folo-follow-everything/id6739802604" target="_blank"><img src="https://github.com/user-attachments/assets/a94d8698-2a11-4f43-9b0a-b756b17b61f7" alt="App Store" height="55"/></a>                                                                                                                                                                                                       |
+| macOS            | <a href="https://github.com/RSSNext/Folo/releases/latest" target="_blank"><img src="https://github.com/user-attachments/assets/cf61e197-d756-4606-a8ad-fb591f79fdfc" alt="App Store" height="55"/></a>                                                                                                                                                                                                                         |
+| Windows          | <a href="https://apps.microsoft.com/detail/9nvfzpv0v0ht?mode=direct" target="_blank"><img src="https://github.com/user-attachments/assets/b3112bab-9dd0-4893-9488-890dcb368f70" alt="Microsoft Store" height="55"/></a> <a href="https://github.com/RSSNext/Folo/releases/latest" target="_blank"><img src="https://github.com/user-attachments/assets/cf61e197-d756-4606-a8ad-fb591f79fdfc" alt="App Store" height="55"/></a> |
+| Linux            | <a href="https://github.com/RSSNext/Folo/releases/latest" target="_blank"><img src="https://github.com/user-attachments/assets/cf61e197-d756-4606-a8ad-fb591f79fdfc" alt="App Store" height="55"/></a>                                                                                                                                                                                                                         |
 
 You can also install using the following methods maintained by our community:
 
@@ -49,6 +56,8 @@ You can also install using the following methods maintained by our community:
 > \[!IMPORTANT]
 >
 > **Star Us**, You will receive all release notifications from GitHub without any delay \~
+
+![Image](https://github.com/user-attachments/assets/a08f9437-b24c-4388-8f01-2826e09eeaf2)
 
 <a href="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats?repo_id=783512367" target="_blank" style="display: block" align="center">
   <picture>
