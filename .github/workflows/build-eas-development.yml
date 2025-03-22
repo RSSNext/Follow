@@ -2,13 +2,13 @@ name: Build iOS IPA for development
 
 on:
   push:
-    branches: [dev, main]
+    branches: [dev]
     paths:
       - "apps/mobile/web-app/**"
       - "apps/mobile/native/**"
       - "apps/mobile/package.json"
   pull_request:
-    branches: [dev, main]
+    branches: [dev]
     paths:
       - "apps/mobile/web-app/**"
       - "apps/mobile/native/**"
@@ -21,7 +21,7 @@ concurrency:
 jobs:
   build:
     name: Build iOS IPA for device
-    runs-on: macos-latest
+    runs-on: self-hosted
 
     steps:
       - name: 📦 Checkout code
