@@ -62,7 +62,7 @@ jobs:
 
   build-simulator:
     name: Build iOS IPA for simulator
-    runs-on: macos-latest
+    runs-on: self-hosted
 
     steps:
       - name: 📦 Checkout code
