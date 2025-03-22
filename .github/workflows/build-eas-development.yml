@@ -38,8 +38,9 @@ jobs:
 
   build:
     name: Build iOS IPA for device
-    needs: check-runner
-    runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    # needs: check-runner
+    # runs-on: ${{ needs.check-runner.outputs.runner-label }}
+    runs-on: macos-latest
 
     steps:
       - name: 📦 Checkout code
@@ -97,8 +98,9 @@ jobs:
 
   build-simulator:
     name: Build iOS IPA for simulator
-    needs: check-runner-simulator
-    runs-on: ${{ needs.check-runner-simulator.outputs.runner-label }}
+    # needs: check-runner-simulator
+    # runs-on: ${{ needs.check-runner-simulator.outputs.runner-label }}
+    runs-on: macos-latest
 
     steps:
       - name: 📦 Checkout code
