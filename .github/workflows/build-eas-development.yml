@@ -28,7 +28,7 @@ jobs:
       - name: Set runner
         id: set-runner
         run: |
-          runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.REPO_RUNNER_ACCESS_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
+          runners=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.RUNNER_GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/actions/runners")
           available=$(echo "$runners" | jq '.runners[] | select(.status == "online" and .busy == false and .labels[] .name == "self-hosted")')
           if [ -n "$available" ]; then
             echo "runner-label=self-hosted" >> $GITHUB_OUTPUT
