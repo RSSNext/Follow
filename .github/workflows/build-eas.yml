@@ -46,7 +46,7 @@ jobs:
   build:
     name: Build iOS IPA
     needs: check-runner
-    runs-on: macos-latest
+    runs-on: ${{ needs.check-runner.outputs.runner-label }}
 
     steps:
       - name: 📦 Checkout code
