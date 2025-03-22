@@ -10,7 +10,6 @@
     "dev": "npm run start",
     "ios": "expo run:ios",
     "ios:device": "expo run:ios --device",
-    "lint": "expo lint",
     "start": "expo start --dev-client",
     "start:clean": "expo start --dev-client --clear",
     "typecheck": "tsc --noEmit",
